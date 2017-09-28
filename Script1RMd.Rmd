@@ -1,0 +1,193 @@
+---
+title: "FirstCleaningRMd"
+author: "evi"
+date: "Sept 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+# Packages installment
+install.packages("dplyr")
+install.packages("plyr")
+install.packages("tidyverse")
+install.packages("sas7bdat")
+install.packages("ggplot")
+```
+
+
+## Reading sas7bdat files
+
+```{r}
+install.packages("sas7bdat")
+library(sas7bdat)
+df <- read.sas7bdat("df.sas7bdat")
+View(df)
+retro <- read.sas7bdat("retro_zbmi.sas7bdat")
+View(retro)
+```
+
+## Manipulating the datasets
+
+```{r}
+install.packages("dplyr")
+library('dplyr')
+df1 <- arrange(df, Subject)
+
+## Finding the frequency of the visits
+install.packages("plyr")
+library(plyr)
+count (retro$Subject)
+
+## Controlling the inclusion and exclusion criteria
+summary(df1$birthweight_kilo)
+library(plyr)
+count (df1$GESTATION_AGE)
+
+## Making some graphs
+plot(retro$ageinmonth, retro$zbmi, type = "l",  xlab="Age (months)", ylab="BMI Z-scores")
+
+##heavy try it only with a fast computer
+install.packages("ggplot2")
+library(ggplot2)
+##ggplot(data = retro, aes(x=ageinmonth, y=zbmi)) + geom_line(aes(colour=Subject))
+```
+
+
+## Manipulating the extended version
+
+```{r}
+retro <- read.csv("retro_zbmi.csv")
+## add a new column 
+library(dplyr)
+df1 <-df %>% mutate("Typeofvisits"=1)
+
+##merge the datasets
+total <- merge(retro, df1, all = TRUE)
+View(total)
+
+require(dplyr)
+total <- total %>%
+  mutate(Typeofvisits = ifelse(is.na(Typeofvisits),0,Typeofvisits))
+
+
+## Control for any duplications and remove them
+anyDuplicated(total$instanceId)
+n_occur <- data.frame(table(total$instanceId))
+total[total$instabceId %in% n_occur$Var1[n_occur$Freq > 1],]
+n_occur[n_occur$Freq > 1,]
+
+```
+
+
+## Descriptives
+
+```{r}
+head(df1)
+
+## Number of participants
+library(dplyr)
+n_distinct(total$Subject)
+
+## Year of birth
+summary(total$year_birth)
+
+## Finding the frequency of the visits
+library(plyr)
+count (total$Subject)
+##How many visits per age in months
+library(plyr)
+count(total$ageinmonth)
+length(total$zbmi)
+sum(is.na(total$zbmi))
+
+## Missing values
+length(df1$zbmi)
+apply(is.na(df1),2,sum)
+length(retro$zbmi)
+apply(is.na(retro),2,sum)
+
+summary(total$zbmi)
+
+barplot(total$ageinmonth)
+abline(h=100, col="magenta")
+plot(total$ageinmonth, total$zbmi, type = "l",  xlab="Age (months)", ylab="BMI Z-scores")
+plot(total$ageinmonth, total$Subject, type = "l",  xlab="Age (months)", ylab="Number of visits")
+
+```
+
+## Tables
+
+```{r}
+table(total$Subject, total$ageinmonth)
+library(plyr)
+count(total$ageinmonth)
+```
+
+
+```{r}
+## exclude all the extreme values (without checking the following and the preceding values)
+## exclude all the missing values
+library(dplyr)
+total1 <- total %>% filter(!is.na(zbmi) & zbmi<5 & zbmi>-4) %>% 
+  mutate(age_in_years= ageinmonth/12) 
+total1
+```
+
+
+
+
+```{r}
+#Remove extreme zbmi without second check and calc age
+total1 <- total %>% filter(!is.na(zbmi) & zbmi<5 & zbmi>-4) %>% 
+  mutate(age_in_years= ageinmonth/12)%>% mutate_if(is.numeric, funs(round(.)))
+
+total2 <- total1 %>% mutate(birthage= 2017-year_birth)
+
+# Remove children with <3 visits
+total3 <- total2[total2$Subject %in% names(which(table(total2$Subject) > 2)), ]
+total3 %>% filter(birthage==12) %>% count('Subject')
+library(plyr)
+count(total3$ageinmonth)
+
+
+
+```
+
+
+
+```{r}
+total2 %>% filter(birthage==10) %>% count(Subject)
+
+library(plyr)
+c <- count(total2$Subject)
+
+total2 %>% filter(!is.na(birthage) & birthage==9) %>% count(Subject)
+total2 %>% filter(!is.na(birthage) & birthage==10) %>% count(Subject)
+total2 %>% filter(!is.na(birthage) & birthage==11) %>% count(Subject)
+total2 %>% filter(!is.na(birthage) & birthage==12) %>% count(Subject)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
