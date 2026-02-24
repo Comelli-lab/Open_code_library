@@ -43,9 +43,9 @@ if (! require(factoextra, quietly=TRUE)) {
   library(factoextra)
 }
 
-if (! require(clustertend, quietly=TRUE)) {
-  install.packages(clustertend)
-  library(clustertend)
+if (! require(hopkins, quietly=TRUE)) {
+  install.packages(hopkins)
+  library(hopkins)
 }
 
 

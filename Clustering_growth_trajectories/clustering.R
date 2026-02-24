@@ -58,6 +58,11 @@ if (!require(cluster, quietly = TRUE)) {
   library(cluster)
 }
 
+
+if (!require(dendextend, quietly = TRUE)) {
+  install.packages(dendextend)
+  library(dendextend)
+}
 # =    2  Data preparation  ====================================================
 
 # We will use a R-built in dataset

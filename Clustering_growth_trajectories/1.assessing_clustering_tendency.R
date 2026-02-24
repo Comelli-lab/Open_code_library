@@ -139,11 +139,7 @@ plot1 <- ggplot(vote_df, aes(x = k, y = Votes, fill = k == optimal_k)) +
     panel.grid.major.y = element_line(color = "grey90", linewidth = 0.3),
     plot.margin = margin(20, 20, 20, 20)
   )
-
-ggsave("tutorial_plot1_voting.png", plot1, width = 10, height = 7, dpi = 300, bg = "white")
-ggsave("tutorial_plot1_voting.svg", plot1, width = 10, height = 7, bg = "white")
-
-# ============================================================================
+#===========================================================================
 # PLOT 2: ELBOW METHOD
 # ============================================================================
 
@@ -185,9 +181,7 @@ plot2 <- ggplot(elbow_df, aes(x = k, y = WSS)) +
     panel.grid.major = element_line(color = "grey90", linewidth = 0.3),
     plot.margin = margin(20, 20, 20, 20)
   )
-
-ggsave("tutorial_plot2_elbow.png", plot2, width = 10, height = 7, dpi = 300, bg = "white")
-ggsave("tutorial_plot2_elbow.svg", plot2, width = 10, height = 7, bg = "white")
+plot2
 
 # ============================================================================
 # PLOT 3: SILHOUETTE ANALYSIS
@@ -221,7 +215,11 @@ plot3 <- fviz_silhouette(sil, print.summary = FALSE) +
 
 ggsave("tutorial_plot3_silhouette.png", plot3, width = 11, height = 7, dpi = 300, bg = "white")
 ggsave("tutorial_plot3_silhouette.svg", plot3, width = 11, height = 7, bg = "white")
+plot3
 
+
+# Silhouette Analysis: works with any distance metric, detects cluster separation,
+# and cohesion 
 # ============================================================================
 # PLOT 4: PCA CLUSTER VISUALIZATION
 # ============================================================================
@@ -260,10 +258,7 @@ plot4 <- ggplot(pca_df, aes(x = PC1, y = PC2, color = Cluster, shape = Cluster))
     panel.grid.major = element_line(color = "grey95", linewidth = 0.3),
     plot.margin = margin(20, 20, 20, 20)
   )
-
-ggsave("tutorial_plot4_pca.png", plot4, width = 11, height = 7, dpi = 300, bg = "white")
-ggsave("tutorial_plot4_pca.svg", plot4, width = 11, height = 7, bg = "white")
-
+plot4
 # ============================================================================
 # PLOT 5: COMPARISON OF MULTIPLE K VALUES
 # ============================================================================
@@ -304,8 +299,7 @@ plot5 <- grid.arrange(
   )
 )
 
-ggsave("tutorial_plot5_comparison.png", plot5, width = 15, height = 10, dpi = 300, bg = "white")
-ggsave("tutorial_plot5_comparison.svg", plot5, width = 15, height = 10, bg = "white")
+# Strong separation (non‑overlapping ellipses) between the three groups which supports k = 3 
 
 # ============================================================================
 # PLOT 6: INDEX HEATMAP
@@ -347,9 +341,7 @@ plot6 <- ggplot(index_matrix, aes(x = Optimal_k, y = reorder(Index, Index_num)))
     plot.margin = margin(20, 20, 20, 20)
   )
 
-ggsave("tutorial_plot6_index_heatmap.png", plot6, width = 10, height = 12, dpi = 300, bg = "white")
-ggsave("tutorial_plot6_index_heatmap.svg", plot6, width = 10, height = 12, bg = "white")
-
+plot6
 # ============================================================================
 # CREATE COMBINED FIGURE
 # ============================================================================
@@ -363,9 +355,6 @@ combined <- grid.arrange(
     vjust = 1
   )
 )
-
-ggsave("tutorial_combined_all.png", combined, width = 20, height = 16, dpi = 300, bg = "white")
-ggsave("tutorial_combined_all.pdf", combined, width = 20, height = 16, bg = "white")
 
 # ============================================================================
 # GENERATE SUMMARY REPORT
