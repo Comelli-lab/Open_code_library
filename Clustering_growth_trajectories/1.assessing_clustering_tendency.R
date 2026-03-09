@@ -51,9 +51,9 @@ for (pkg in packages) {
   }
 }
 
-# ============================================================================
+
 # GENERATE SYNTHETIC DATA FOR TUTORIAL
-# ============================================================================
+
 
 set.seed(42)
 
@@ -90,9 +90,9 @@ true_labels <- rep(1:3, each = 50)
 # Scale the data
 tutorial_data_scaled <- scale(tutorial_data)
 
-# ============================================================================
-# RUN NBCLUST ANALYSIS
-# ============================================================================
+
+# ===== 2. NBClust analysis to determine optimal number of clusters=============
+
 
 cat("Running NbClust analysis for tutorial...\n")
 cat("Testing cluster numbers from 2 to 8...\n\n")

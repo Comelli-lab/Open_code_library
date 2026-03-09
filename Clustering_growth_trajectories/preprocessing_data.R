@@ -38,9 +38,9 @@
 #TOC>   6        Data cleaning                           200
 #TOC>   7        Post-cleaning diagnostics               240
 #TOC>
-#TOC> ===========================================================================
+#TOC> ==========================================================================
 
-# =    1  Packages  =============================================================
+# ======    1  Packages  =======================================================
 
 packages <- c("tidyverse", "naniar", "skimr", "ggplot2")
 
@@ -62,11 +62,9 @@ data <- read_csv("mock_precision_growth_dataset.csv")
 glimpse(data)
 summary(data)
 
-# =    3  Missingness exploration  =============================================
+# =====   3  Missingness exploration  ===========================================
 
-# ------------------------------------------------------------------------------
 # 3.1 Percent missing per variable
-# ------------------------------------------------------------------------------
 
 missing_summary <- data %>%
   summarise(across(everything(),
@@ -78,18 +76,17 @@ missing_summary <- data %>%
 
 print(missing_summary)
 
-# ------------------------------------------------------------------------------
 # 3.2 Visual inspection of missing data
-# ------------------------------------------------------------------------------
+
 
 vis_miss(data)
 
 # Missingness combinations
 gg_miss_upset(data)
 
-# ------------------------------------------------------------------------------
+
 # 3.3 Missingness by subgroup (example: sex)
-# ------------------------------------------------------------------------------
+
 
 if ("sex" %in% names(data)) {
   
@@ -99,11 +96,10 @@ if ("sex" %in% names(data)) {
                      ~ mean(is.na(.)) * 100))
 }
 
-# =    4  Distribution inspection  =============================================
+# ======    4  Distribution inspection  =========================================
 
-# ------------------------------------------------------------------------------
 # 4.1 zBMI distribution
-# ------------------------------------------------------------------------------
+
 
 if ("zbmi_24" %in% names(data)) {
   
@@ -113,9 +109,9 @@ if ("zbmi_24" %in% names(data)) {
     labs(title = "Distribution of zBMI at 24 months")
 }
 
-# ------------------------------------------------------------------------------
+
 # 4.2 CRP distribution
-# ------------------------------------------------------------------------------
+
 
 if ("crp" %in% names(data)) {
   
@@ -134,11 +130,10 @@ if ("crp" %in% names(data)) {
     labs(title = "Distribution of log(CRP)")
 }
 
-# =    5  Identifying implausible values  ======================================
+# =====    5  Identifying implausible values  ===================================
 
-# ------------------------------------------------------------------------------
 # 5.1 Implausible age values
-# ------------------------------------------------------------------------------
+
 
 if ("age_months" %in% names(data)) {
   
@@ -148,9 +143,9 @@ if ("age_months" %in% names(data)) {
   print(implausible_age)
 }
 
-# ------------------------------------------------------------------------------
+
 # 5.2 WHO-style plausibility cut-offs for zBMI
-# ------------------------------------------------------------------------------
+
 
 # WHO commonly flags z-scores < -5 or > +5 as implausible
 
@@ -162,9 +157,9 @@ if ("zbmi_24" %in% names(data)) {
   print(implausible_zbmi)
 }
 
-# ------------------------------------------------------------------------------
+
 # 5.3 Extreme CRP values (possible acute infection)
-# ------------------------------------------------------------------------------
+
 
 if ("crp" %in% names(data)) {
   
@@ -174,7 +169,7 @@ if ("crp" %in% names(data)) {
   print(extreme_crp)
 }
 
-# =    6  Data cleaning  ========================================================
+# =====    6  Data cleaning  ===================================================
 
 clean_data <- data
 
@@ -196,7 +191,7 @@ if ("crp" %in% names(clean_data)) {
     filter(crp <= 10 | is.na(crp))
 }
 
-# =    7  Post-cleaning diagnostics  ===========================================
+# =====    7  Post-cleaning diagnostics  =======================================
 
 # Compare sample size
 cat("Original N:", nrow(data), "\n")
@@ -215,7 +210,3 @@ print(missing_summary_clean)
 
 # Save cleaned dataset
 write_csv(clean_data, "clean_precision_growth_dataset.csv")
-
-# ==============================================================================
-# END OF SCRIPT
-# ==============================================================================
