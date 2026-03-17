@@ -42,7 +42,7 @@
 
 # ======    1  Packages  =======================================================
 
-packages <- c("tidyverse", "naniar", "skimr", "ggplot2")
+packages <- c("tidyverse", "naniar", "skimr", "ggplot2","dplyr")
 
 for (pkg in packages) {
   if (!require(pkg, character.only = TRUE)) {
